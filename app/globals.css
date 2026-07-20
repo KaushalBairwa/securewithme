@@ -1,31 +1,82 @@
 @import "tailwindcss";
 
-html{
-scroll-behavior:smooth;
+/* =========================
+   Theme
+========================= */
+
+:root {
+  --background: #05070b;
+  --card: #0d1117;
+  --primary: #00e5ff;
+  --secondary: #00ffa3;
+  --text: #ffffff;
+  --muted: #94a3b8;
+  --border: #1e293b;
 }
 
-body{
+/* =========================
+   Base
+========================= */
 
-background:#05070b;
-
-color:white;
-
-font-family:var(--font-inter);
-
-overflow-x:hidden;
-
+html {
+  scroll-behavior: smooth;
 }
 
-h1,h2,h3,h4{
-
-font-family:var(--font-orbitron);
-
+body {
+  background: var(--background);
+  color: var(--text);
+  overflow-x: hidden;
+  font-family: var(--font-inter);
 }
 
-::selection{
+/* =========================
+   Headings
+========================= */
 
-background:#00E5FF;
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-orbitron);
+}
 
-color:black;
+/* =========================
+   Terminal
+========================= */
 
+code,
+pre {
+  font-family: var(--font-mono);
+}
+
+/* =========================
+   Selection
+========================= */
+
+::selection {
+  background: var(--primary);
+  color: black;
+}
+
+/* =========================
+   Scrollbar
+========================= */
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #05070b;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 229, 255, 0.4);
+  border-radius: 20px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #00e5ff;
 }

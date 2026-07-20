@@ -1,61 +1,77 @@
 "use client";
 
-import CountUp from "react-countup";
-import { useInView } from "react-intersection-observer";
+import { motion } from "framer-motion";
+import type { LucideIcon } from "lucide-react";
 
-interface Props{
-    title:string;
-    number:number;
-    suffix?:string;
-    icon:any;
+interface StatCardProps {
+  title: string;
+  number: number;
+  icon: LucideIcon;
 }
 
 export default function StatCard({
-    title,
-    number,
-    suffix="+",
-    icon:Icon,
-}:Props){
+  title,
+  number,
+  icon: Icon,
+}: StatCardProps) {
+  return (
+    <motion.article
+      initial={{
+        opacity: 0,
+        y: 20,
+      }}
+      whileInView={{
+        opacity: 1,
+        y: 0,
+      }}
+      viewport={{
+        once: true,
+      }}
+      transition={{
+        duration: 0.5,
+      }}
+      whileHover={{
+        y: -5,
+      }}
+      className="group relative overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03] p-6 transition-colors duration-300 hover:border-cyan-400/30 hover:bg-cyan-400/[0.035]"
+    >
+      <div className="pointer-events-none absolute right-0 top-0 h-28 w-28 rounded-full bg-cyan-400/[0.06] blur-[55px] transition group-hover:bg-cyan-400/[0.1]" />
 
-const {ref,inView}=useInView({
-triggerOnce:true
-});
+      <div className="relative">
+        <div className="flex h-12 w-12 items-center justify-center rounded-xl border border-cyan-400/20 bg-cyan-400/[0.07] text-cyan-400">
+          <Icon
+            className="h-6 w-6"
+            aria-hidden="true"
+          />
+        </div>
 
-return(
+        <p className="mt-6 text-4xl font-bold text-white">
+          {number}+
+        </p>
 
-<div
-ref={ref}
-className="rounded-2xl border border-cyan-500/20 bg-[#0b0b0b] p-8 hover:border-cyan-400 transition duration-300 hover:shadow-[0_0_40px_rgba(0,255,255,.15)]"
->
+        <p className="mt-2 text-sm leading-6 text-slate-400">
+          {title}
+        </p>
 
-<div className="mb-6">
-
-<Icon
-size={36}
-className="text-cyan-400"
-/>
-
-</div>
-
-<h3 className="text-5xl font-bold text-white">
-
-{inView &&
-<CountUp
-end={number}
-duration={2}
-/>
-}
-
-{suffix}
-
-</h3>
-
-<p className="mt-3 text-gray-400">
-{title}
-</p>
-
-</div>
-
-);
-
+        <div className="mt-5 h-px w-full overflow-hidden bg-white/[0.06]">
+          <motion.div
+            initial={{
+              width: 0,
+            }}
+            whileInView={{
+              width: "55%",
+            }}
+            viewport={{
+              once: true,
+            }}
+            transition={{
+              duration: 0.9,
+              delay: 0.2,
+            }}
+            className="h-full bg-gradient-to-r from-cyan-400 to-emerald-400"
+          />
+        </div>
+      </div>
+    </motion.article>
+  );
 }

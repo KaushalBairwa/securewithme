@@ -1,20 +1,20 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { projects } from "@/data/projects";
-import ProjectCard from "@/components/cards/ProjectCard";
+import { researchItems } from "@/data/research";
+import ResearchCard from "@/components/cards/ResearchCard";
 
-interface ProjectsProps {
+interface ResearchProps {
   embedded?: boolean;
   compact?: boolean;
 }
 
-export default function Projects({
+export default function Research({
   embedded = false,
   compact = false,
-}: ProjectsProps) {
-  const featuredProjects = projects.filter(
-    (project) => project.featured,
+}: ResearchProps) {
+  const featuredResearch = researchItems.filter(
+    (item) => item.featured,
   );
 
   const Wrapper = embedded ? "div" : "section";
@@ -22,14 +22,14 @@ export default function Projects({
 
   return (
     <Wrapper
-      id={embedded ? undefined : "projects"}
+      id={embedded ? undefined : "research"}
       className={
         embedded
           ? "relative w-full min-w-0"
-          : "relative bg-[#05070b] px-6 py-24"
+          : "relative border-y border-white/5 bg-[#07090d] px-6 py-24"
       }
     >
-      <div className="pointer-events-none absolute left-1/2 top-20 h-72 w-72 -translate-x-1/2 rounded-full bg-cyan-400/5 blur-[120px]" />
+      <div className="pointer-events-none absolute right-0 top-20 h-80 w-80 rounded-full bg-violet-500/5 blur-[130px]" />
 
       <div
         className={
@@ -54,8 +54,8 @@ export default function Projects({
             duration: 0.6,
           }}
         >
-          <p className="font-mono text-sm uppercase tracking-[0.35em] text-cyan-400">
-            Security Products
+          <p className="font-mono text-sm uppercase tracking-[0.35em] text-violet-400">
+            Research Laboratory
           </p>
 
           <h2
@@ -65,10 +65,10 @@ export default function Projects({
                 : "mt-4 max-w-4xl text-4xl font-bold leading-tight sm:text-5xl"
             }
           >
-            Building practical security solutions
-            <span className="text-cyan-400">
+            Exploring the future of
+            <span className="text-violet-400">
               {" "}
-              beyond certifications.
+              cybersecurity and AI.
             </span>
           </h2>
 
@@ -79,10 +79,9 @@ export default function Projects({
                 : "mt-6 max-w-3xl leading-7 text-slate-400"
             }
           >
-            Cybersecurity platforms, AI-assisted tools and
-            practical security laboratories focused on cloud
-            security, detection engineering, offensive security
-            and security automation.
+            Independent research focused on emerging security
+            risks, cloud identity, AI-assisted defence and the
+            evolution of modern security operations.
           </p>
         </motion.div>
 
@@ -90,13 +89,13 @@ export default function Projects({
           className={
             useCompactLayout
               ? "mt-10 grid min-w-0 gap-5"
-              : "mt-14 grid gap-7 lg:grid-cols-2"
+              : "mt-14 grid gap-7 lg:grid-cols-3"
           }
         >
-          {featuredProjects.map((project) => (
-            <ProjectCard
-              key={project.id}
-              project={project}
+          {featuredResearch.map((item) => (
+            <ResearchCard
+              key={item.id}
+              item={item}
             />
           ))}
         </div>

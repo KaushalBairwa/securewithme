@@ -1,111 +1,163 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Menu, ShieldCheck, X } from "lucide-react";
 
-const navItems = [
+interface NavLink {
+  label: string;
+  href: string;
+}
+
+const navLinks: NavLink[] = [
   { label: "Home", href: "#home" },
   { label: "About", href: "#about" },
   { label: "Experience", href: "#experience" },
   { label: "Skills", href: "#skills" },
   { label: "Projects", href: "#projects" },
   { label: "Research", href: "#research" },
+  { label: "Services", href: "#services" },
+  { label: "Lab", href: "#lab" },
   { label: "Contact", href: "#contact" },
 ];
 
 export default function Navbar() {
-  const [scrolled, setScrolled] = useState(false);
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
+      setIsScrolled(window.scrollY > 20);
     };
+
+    handleScroll();
 
     window.addEventListener("scroll", handleScroll);
 
-    return () => window.removeEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
   }, []);
+
+  const closeMenu = () => {
+    setIsMenuOpen(false);
+  };
 
   return (
     <header
-      className={`fixed left-0 top-0 z-50 w-full transition-all duration-300 ${
-        scrolled ? "py-3" : "py-5"
+      className={`fixed inset-x-0 top-0 z-50 border-b transition-all duration-300 ${
+        isScrolled
+          ? "border-white/[0.08] bg-[#05070b]/90 shadow-[0_12px_40px_rgba(0,0,0,0.35)] backdrop-blur-xl"
+          : "border-white/[0.06] bg-[#05070b]/75 backdrop-blur-lg"
       }`}
     >
-      <nav
-        className={`mx-auto flex w-[94%] max-w-7xl items-center justify-between rounded-2xl border px-5 py-3 backdrop-blur-xl transition-all duration-300 lg:px-7 ${
-          scrolled
-            ? "border-cyan-400/20 bg-black/85 shadow-[0_10px_40px_rgba(0,229,255,0.08)]"
-            : "border-white/10 bg-black/55"
-        }`}
-      >
-        <a href="#home" className="flex items-center gap-3">
-          <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-cyan-400 text-black">
-            <ShieldCheck size={24} />
+      <nav className="mx-auto flex h-[72px] max-w-7xl items-center justify-between px-5 sm:px-6 lg:px-8">
+        {/* Brand */}
+        <a
+          href="#home"
+          onClick={closeMenu}
+          className="group flex items-center gap-3"
+          aria-label="SecureWithMe homepage"
+        >
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-cyan-400/30 bg-cyan-400/[0.07] font-mono text-sm font-bold text-cyan-400 transition duration-300 group-hover:border-cyan-400/60 group-hover:bg-cyan-400/[0.12] group-hover:shadow-[0_0_25px_rgba(0,229,255,0.14)]">
+            &lt;/&gt;
           </div>
 
           <div>
-            <p className="font-bold text-white">SecureWithMe</p>
-            <p className="text-xs text-slate-400">
-              Cloud & AI Security
+            <p className="text-sm font-bold tracking-wide text-white sm:text-base">
+              SecureWithMe
+            </p>
+
+            <p className="hidden font-mono text-[9px] uppercase tracking-[0.16em] text-slate-500 sm:block">
+              Cloud • AI • Cybersecurity
             </p>
           </div>
         </a>
 
-        <div className="hidden items-center gap-6 lg:flex">
-          {navItems.map((item) => (
+        {/* Desktop Navigation */}
+        <div className="hidden items-center gap-1 xl:flex">
+          {navLinks.map((link) => (
             <a
-              key={item.label}
-              href={item.href}
-              className="text-sm text-slate-300 transition hover:text-cyan-400"
+              key={link.href}
+              href={link.href}
+              className="relative rounded-lg px-3 py-2 text-sm font-medium text-slate-300 transition duration-200 hover:bg-white/[0.04] hover:text-cyan-400"
             >
-              {item.label}
+              {link.label}
             </a>
           ))}
         </div>
 
+        {/* Desktop CTA */}
         <a
           href="#contact"
-          className="hidden rounded-xl border border-cyan-400/70 px-5 py-2.5 text-sm font-semibold text-cyan-400 transition hover:bg-cyan-400 hover:text-black lg:block"
+          className="hidden rounded-lg border border-cyan-400/50 bg-cyan-400/[0.08] px-4 py-2.5 text-sm font-semibold text-cyan-300 transition duration-300 hover:bg-cyan-400 hover:text-[#05070b] hover:shadow-[0_0_28px_rgba(0,229,255,0.2)] xl:inline-flex"
         >
           Book Consultation
         </a>
 
+        {/* Mobile Menu Button */}
         <button
           type="button"
-          aria-label="Open navigation menu"
-          onClick={() => setMenuOpen(!menuOpen)}
-          className="rounded-lg border border-white/10 p-2 text-white lg:hidden"
+          onClick={() => setIsMenuOpen((current) => !current)}
+          aria-expanded={isMenuOpen}
+          aria-label={isMenuOpen ? "Close navigation menu" : "Open navigation menu"}
+          className="flex h-10 w-10 items-center justify-center rounded-lg border border-white/10 bg-white/[0.03] text-white transition hover:border-cyan-400/40 hover:text-cyan-400 xl:hidden"
         >
-          {menuOpen ? <X size={22} /> : <Menu size={22} />}
+          <span className="relative block h-5 w-5">
+            <span
+              className={`absolute left-0 top-1 block h-px w-5 bg-current transition duration-300 ${
+                isMenuOpen ? "translate-y-[6px] rotate-45" : ""
+              }`}
+            />
+
+            <span
+              className={`absolute left-0 top-[10px] block h-px w-5 bg-current transition duration-300 ${
+                isMenuOpen ? "opacity-0" : "opacity-100"
+              }`}
+            />
+
+            <span
+              className={`absolute bottom-1 left-0 block h-px w-5 bg-current transition duration-300 ${
+                isMenuOpen ? "-translate-y-[6px] -rotate-45" : ""
+              }`}
+            />
+          </span>
         </button>
       </nav>
 
-      {menuOpen && (
-        <div className="mx-auto mt-2 w-[94%] rounded-2xl border border-cyan-400/20 bg-black/95 p-5 backdrop-blur-xl lg:hidden">
-          <div className="flex flex-col gap-4">
-            {navItems.map((item) => (
+      {/* Mobile Navigation */}
+      <div
+        className={`overflow-hidden border-t border-white/[0.06] bg-[#07090d]/98 backdrop-blur-xl transition-all duration-300 xl:hidden ${
+          isMenuOpen
+            ? "max-h-[700px] opacity-100"
+            : "max-h-0 border-transparent opacity-0"
+        }`}
+      >
+        <div className="mx-auto max-w-7xl px-5 py-5 sm:px-6">
+          <div className="grid gap-1 sm:grid-cols-2">
+            {navLinks.map((link, index) => (
               <a
-                key={item.label}
-                href={item.href}
-                onClick={() => setMenuOpen(false)}
-                className="border-b border-white/5 pb-3 text-slate-300 transition hover:text-cyan-400"
+                key={link.href}
+                href={link.href}
+                onClick={closeMenu}
+                className="group flex items-center justify-between rounded-lg border border-transparent px-4 py-3 text-sm font-medium text-slate-300 transition hover:border-cyan-400/20 hover:bg-cyan-400/[0.05] hover:text-cyan-400"
               >
-                {item.label}
+                <span>{link.label}</span>
+
+                <span className="font-mono text-xs text-slate-600 transition group-hover:text-cyan-400">
+                  {String(index + 1).padStart(2, "0")}
+                </span>
               </a>
             ))}
-
-            <a
-              href="#contact"
-              onClick={() => setMenuOpen(false)}
-              className="rounded-xl bg-cyan-400 px-5 py-3 text-center font-semibold text-black"
-            >
-              Book Consultation
-            </a>
           </div>
+
+          <a
+            href="#contact"
+            onClick={closeMenu}
+            className="mt-4 flex w-full items-center justify-center rounded-lg bg-cyan-400 px-5 py-3 text-sm font-bold text-[#05070b] transition hover:bg-cyan-300"
+          >
+            Book Consultation
+          </a>
         </div>
-      )}
+      </div>
     </header>
   );
 }
