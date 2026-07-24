@@ -1,11 +1,14 @@
 "use client";
 
-import {
-  useMemo,
-  useState,
-} from "react";
-
+import { useMemo, useState } from "react";
 import { motion } from "framer-motion";
+import {
+  Clock3,
+  ExternalLink,
+  ListChecks,
+  Monitor,
+  Play,
+} from "lucide-react";
 
 import {
   labNodes,
@@ -15,10 +18,7 @@ import {
   type LabScenario,
 } from "@/data/lab";
 
-const nodeStatusStyles: Record<
-  LabNodeStatus,
-  string
-> = {
+const nodeStatusStyles: Record<LabNodeStatus, string> = {
   Online:
     "border-emerald-400/30 bg-emerald-400/[0.08] text-emerald-400",
   Building:
@@ -140,14 +140,191 @@ function ArchitectureNode({
   );
 }
 
+function ScenarioCard({
+  scenario,
+  index,
+}: {
+  scenario: LabScenario;
+  index: number;
+}) {
+  const isAvailable =
+    scenario.status === "Available" &&
+    Boolean(scenario.launchUrl);
+
+  return (
+    <motion.article
+      initial={{
+        opacity: 0,
+        y: 22,
+      }}
+      whileInView={{
+        opacity: 1,
+        y: 0,
+      }}
+      viewport={{
+        once: true,
+      }}
+      transition={{
+        delay: index * 0.06,
+      }}
+      className={`group flex min-h-[430px] flex-col rounded-2xl border bg-[#090c12] p-6 transition duration-300 ${
+        isAvailable
+          ? "border-emerald-400/20 hover:-translate-y-1 hover:border-emerald-400/50 hover:shadow-[0_22px_70px_rgba(16,185,129,0.08)]"
+          : "border-white/[0.08] hover:border-purple-400/30"
+      }`}
+    >
+      <div className="flex items-start justify-between gap-4">
+        <p className="font-mono text-[10px] uppercase tracking-wider text-purple-400">
+          {scenario.category}
+        </p>
+
+        <span
+          className={`rounded-full border px-2.5 py-1 font-mono text-[8px] uppercase tracking-wider ${
+            scenarioStatusStyles[scenario.status]
+          }`}
+        >
+          {scenario.status}
+        </span>
+      </div>
+
+      <h4 className="mt-5 text-xl font-bold leading-7 text-white">
+        {scenario.title}
+      </h4>
+
+      <p className="mt-4 text-sm leading-6 text-slate-400">
+        {scenario.description}
+      </p>
+
+      {(scenario.duration ||
+        scenario.exercises ||
+        scenario.environment) && (
+        <div className="mt-5 grid gap-2">
+          {scenario.duration && (
+            <div className="flex items-center gap-2 text-xs text-slate-400">
+              <Clock3
+                className="h-4 w-4 text-cyan-400"
+                aria-hidden="true"
+              />
+
+              <span>{scenario.duration}</span>
+            </div>
+          )}
+
+          {typeof scenario.exercises === "number" && (
+            <div className="flex items-center gap-2 text-xs text-slate-400">
+              <ListChecks
+                className="h-4 w-4 text-emerald-400"
+                aria-hidden="true"
+              />
+
+              <span>
+                {scenario.exercises} verified exercises
+              </span>
+            </div>
+          )}
+
+          {scenario.environment && (
+            <div className="flex items-center gap-2 text-xs text-slate-400">
+              <Monitor
+                className="h-4 w-4 text-purple-400"
+                aria-hidden="true"
+              />
+
+              <span>{scenario.environment}</span>
+            </div>
+          )}
+        </div>
+      )}
+
+      <div className="mt-5 flex flex-wrap gap-2">
+        {scenario.techniques.map((technique) => (
+          <span
+            key={technique}
+            className="rounded-md border border-white/[0.07] px-2.5 py-1 font-mono text-[10px] text-slate-400"
+          >
+            {technique}
+          </span>
+        ))}
+      </div>
+
+      <div className="mt-auto pt-6">
+        <div className="flex items-center justify-between border-t border-white/[0.06] pt-5">
+          <span className="text-xs text-slate-500">
+            Difficulty
+          </span>
+
+          <span
+            className={`font-mono text-xs ${
+              difficultyStyles[scenario.difficulty]
+            }`}
+          >
+            {scenario.difficulty}
+          </span>
+        </div>
+
+        {isAvailable && scenario.launchUrl ? (
+          <a
+            href={scenario.launchUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-5 flex w-full items-center justify-center gap-2 rounded-xl border border-emerald-400/40 bg-emerald-400/[0.1] px-4 py-3 font-mono text-xs font-bold uppercase tracking-[0.12em] text-emerald-300 transition hover:border-emerald-300 hover:bg-emerald-400/[0.16] hover:text-white"
+          >
+            <Play
+              className="h-4 w-4"
+              aria-hidden="true"
+            />
+
+            Launch Free Lab
+
+            <ExternalLink
+              className="h-4 w-4"
+              aria-hidden="true"
+            />
+          </a>
+        ) : (
+          <button
+            type="button"
+            disabled
+            className="mt-5 flex w-full cursor-not-allowed items-center justify-center rounded-xl border border-white/[0.08] bg-white/[0.025] px-4 py-3 font-mono text-xs uppercase tracking-[0.12em] text-slate-600"
+          >
+            {scenario.status === "Building"
+              ? "Lab in Development"
+              : "Planned Lab"}
+          </button>
+        )}
+
+        {scenario.walkthroughUrl && (
+          <a
+            href={scenario.walkthroughUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-3 flex w-full items-center justify-center gap-2 rounded-xl border border-white/[0.08] px-4 py-3 font-mono text-xs text-slate-400 transition hover:border-cyan-400/30 hover:text-cyan-300"
+          >
+            View Walkthrough
+
+            <ExternalLink
+              className="h-4 w-4"
+              aria-hidden="true"
+            />
+          </a>
+        )}
+
+        {scenario.platform && (
+          <p className="mt-3 text-center font-mono text-[9px] uppercase tracking-[0.16em] text-slate-600">
+            Hosted on {scenario.platform}
+          </p>
+        )}
+      </div>
+    </motion.article>
+  );
+}
+
 export default function Lab() {
   const [selectedNodeId, setSelectedNodeId] =
     useState(labNodes[0].id);
 
   const [scenarioFilter, setScenarioFilter] =
-    useState<"All" | LabScenario["status"]>(
-      "All",
-    );
+    useState<"All" | LabScenario["status"]>("All");
 
   const selectedNode =
     labNodes.find(
@@ -165,13 +342,23 @@ export default function Lab() {
     );
   }, [scenarioFilter]);
 
-  const onlineNodes = labNodes.filter(
-    (node) => node.status === "Online",
+  const availableLabs = labScenarios.filter(
+    (scenario) => scenario.status === "Available",
   ).length;
 
-  const buildingNodes = labNodes.filter(
-    (node) => node.status === "Building",
+  const buildingLabs = labScenarios.filter(
+    (scenario) => scenario.status === "Building",
   ).length;
+
+  const verifiedExercises = labScenarios
+    .filter(
+      (scenario) => scenario.status === "Available",
+    )
+    .reduce(
+      (total, scenario) =>
+        total + (scenario.exercises ?? 0),
+      0,
+    );
 
   return (
     <section
@@ -197,48 +384,48 @@ export default function Lab() {
           }}
         >
           <p className="font-mono text-sm uppercase tracking-[0.35em] text-purple-400">
-            Cyber Range Lab
+            Interactive Cybersecurity Labs
           </p>
 
           <h2 className="mt-4 max-w-5xl text-4xl font-bold leading-tight text-white sm:text-5xl">
-            Building an enterprise-style security lab
-            for
+            Practice attack discovery, detection and
+            investigation inside
             <span className="text-cyan-400">
               {" "}
-              attack, detection and investigation.
+              controlled browser environments.
             </span>
           </h2>
 
           <p className="mt-6 max-w-3xl leading-7 text-slate-400">
-            AegisRange is a controlled cybersecurity
-            environment designed to demonstrate offensive
-            testing, defensive monitoring, identity attacks
-            and detection engineering without targeting
-            production systems.
+            Free hands-on security exercises designed to
+            demonstrate practical offensive and defensive
+            workflows without targeting production systems.
+            Available labs can be launched directly from the
+            browser.
           </p>
         </motion.div>
 
         <div className="mt-10 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
           {[
             {
-              label: "Lab Nodes",
-              value: labNodes.length,
-              description: "Controlled virtual systems",
+              label: "Public Labs",
+              value: availableLabs,
+              description: "Currently available",
             },
             {
-              label: "Online",
-              value: onlineNodes,
-              description: "Currently operational",
+              label: "Verified Exercises",
+              value: verifiedExercises,
+              description: "Automatic completion checks",
             },
             {
               label: "In Development",
-              value: buildingNodes,
-              description: "Active implementation",
+              value: buildingLabs,
+              description: "Active lab implementation",
             },
             {
-              label: "Scenarios",
+              label: "Lab Roadmap",
               value: labScenarios.length,
-              description: "Attack and detection modules",
+              description: "Total planned scenarios",
             },
           ].map((metric, index) => (
             <motion.article
@@ -275,7 +462,6 @@ export default function Lab() {
         </div>
 
         <div className="mt-6 grid gap-5 xl:grid-cols-[minmax(0,1.75fr)_380px]">
-          {/* Architecture */}
           <motion.div
             initial={{
               opacity: 0,
@@ -293,7 +479,7 @@ export default function Lab() {
             <div className="flex flex-col gap-3 border-b border-white/[0.07] px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
               <div>
                 <h3 className="font-mono text-sm font-bold uppercase tracking-[0.18em] text-cyan-400">
-                  AegisRange Architecture
+                  Controlled Lab Architecture
                 </h3>
 
                 <p className="mt-1 text-xs text-slate-500">
@@ -301,8 +487,8 @@ export default function Lab() {
                 </p>
               </div>
 
-              <span className="w-fit rounded-md border border-amber-400/25 bg-amber-400/[0.06] px-3 py-1.5 font-mono text-[10px] uppercase tracking-wider text-amber-400">
-                Development environment
+              <span className="w-fit rounded-md border border-emerald-400/25 bg-emerald-400/[0.06] px-3 py-1.5 font-mono text-[10px] uppercase tracking-wider text-emerald-400">
+                Public lab available
               </span>
             </div>
 
@@ -344,10 +530,8 @@ export default function Lab() {
 
                 {architectureConnections.map(
                   (connection, index) => {
-                    const [
-                      startX,
-                      startY,
-                    ] = connection.start;
+                    const [startX, startY] =
+                      connection.start;
 
                     const [endX, endY] =
                       connection.end;
@@ -391,9 +575,7 @@ export default function Lab() {
                           filter="url(#lab-line-glow)"
                         >
                           <animateMotion
-                            dur={`${
-                              3 + index * 0.3
-                            }s`}
+                            dur={`${3 + index * 0.3}s`}
                             repeatCount="indefinite"
                             begin={`${index * 0.25}s`}
                           >
@@ -437,7 +619,6 @@ export default function Lab() {
             </div>
           </motion.div>
 
-          {/* Selected node */}
           <motion.aside
             key={selectedNode.id}
             initial={{
@@ -521,7 +702,6 @@ export default function Lab() {
           </motion.aside>
         </div>
 
-        {/* Scenarios */}
         <div className="mt-20">
           <div className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
             <div>
@@ -530,7 +710,7 @@ export default function Lab() {
               </p>
 
               <h3 className="mt-3 text-3xl font-bold text-white">
-                Attack and detection modules
+                Launch practical cybersecurity exercises
               </h3>
             </div>
 
@@ -564,77 +744,11 @@ export default function Lab() {
           <div className="mt-8 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
             {visibleScenarios.map(
               (scenario, index) => (
-                <motion.article
+                <ScenarioCard
                   key={scenario.id}
-                  initial={{
-                    opacity: 0,
-                    y: 22,
-                  }}
-                  whileInView={{
-                    opacity: 1,
-                    y: 0,
-                  }}
-                  viewport={{
-                    once: true,
-                  }}
-                  transition={{
-                    delay: index * 0.06,
-                  }}
-                  className="flex min-h-[300px] flex-col rounded-2xl border border-white/[0.08] bg-[#090c12] p-6 transition hover:border-purple-400/30"
-                >
-                  <div className="flex items-start justify-between gap-4">
-                    <p className="font-mono text-[10px] uppercase tracking-wider text-purple-400">
-                      {scenario.category}
-                    </p>
-
-                    <span
-                      className={`rounded-full border px-2.5 py-1 font-mono text-[8px] uppercase tracking-wider ${
-                        scenarioStatusStyles[
-                          scenario.status
-                        ]
-                      }`}
-                    >
-                      {scenario.status}
-                    </span>
-                  </div>
-
-                  <h4 className="mt-5 text-xl font-bold text-white">
-                    {scenario.title}
-                  </h4>
-
-                  <p className="mt-4 text-sm leading-6 text-slate-400">
-                    {scenario.description}
-                  </p>
-
-                  <div className="mt-5 flex flex-wrap gap-2">
-                    {scenario.techniques.map(
-                      (technique) => (
-                        <span
-                          key={technique}
-                          className="rounded-md border border-white/[0.07] px-2.5 py-1 font-mono text-[10px] text-slate-400"
-                        >
-                          {technique}
-                        </span>
-                      ),
-                    )}
-                  </div>
-
-                  <div className="mt-auto flex items-center justify-between border-t border-white/[0.06] pt-5">
-                    <span className="text-xs text-slate-500">
-                      Difficulty
-                    </span>
-
-                    <span
-                      className={`font-mono text-xs ${
-                        difficultyStyles[
-                          scenario.difficulty
-                        ]
-                      }`}
-                    >
-                      {scenario.difficulty}
-                    </span>
-                  </div>
-                </motion.article>
+                  scenario={scenario}
+                  index={index}
+                />
               ),
             )}
           </div>
@@ -646,11 +760,10 @@ export default function Lab() {
           </p>
 
           <p className="mt-3 max-w-4xl text-sm leading-6 text-slate-400">
-            AegisRange is currently under active
-            development. Features marked as building or
-            planned are part of the published development
-            roadmap and are not presented as completed
-            capabilities.
+            Only scenarios marked Available are publicly
+            usable. Features marked Building or Planned are
+            included as part of the development roadmap and
+            are not presented as completed capabilities.
           </p>
         </div>
       </div>

@@ -25,6 +25,12 @@ export interface LabScenario {
   description: string;
   techniques: string[];
   status: "Available" | "Building" | "Planned";
+  duration?: string;
+  exercises?: number;
+  environment?: string;
+  platform?: string;
+  launchUrl?: string;
+  walkthroughUrl?: string;
 }
 
 export const labNodes: LabNode[] = [
@@ -150,41 +156,61 @@ export const labScenarios: LabScenario[] = [
     category: "Reconnaissance",
     difficulty: "Beginner",
     description:
-      "Discover exposed hosts, services, operating systems and potential attack paths across the simulated environment.",
+      "Map a controlled target, discover exposed TCP services, fingerprint the web server, locate hidden content and retrieve the final assessment flag.",
     techniques: [
-      "Port Scanning",
+      "Nmap Scanning",
       "Service Enumeration",
-      "OS Fingerprinting",
+      "HTTP Analysis",
+      "Hidden Path Discovery",
+      "Netcat",
+      "Attack-Surface Mapping",
     ],
     status: "Available",
+    duration: "25–35 minutes",
+    exercises: 6,
+    environment: "Disposable Ubuntu browser terminal",
+    platform: "Killercoda",
+    launchUrl:
+      "https://killercoda.com/kaushalkumar/scenario/external-attack-surface",
   },
   {
     id: "windows-detection",
-    title: "Windows Attack Detection",
+    title: "Suspicious PowerShell Detection",
     category: "Detection Engineering",
     difficulty: "Intermediate",
     description:
-      "Generate suspicious PowerShell and Windows activity, then identify it through Sysmon and SIEM telemetry.",
+      "Investigate suspicious PowerShell execution using prepared Sysmon, Windows Security, PowerShell and Wazuh telemetry.",
     techniques: [
       "PowerShell Logging",
       "Sysmon",
       "Sigma Rules",
+      "Wazuh",
+      "MITRE ATT&CK",
     ],
     status: "Building",
+    duration: "30–40 minutes",
+    exercises: 8,
+    environment: "Browser-based log investigation",
+    platform: "Killercoda",
   },
   {
     id: "active-directory-attack",
-    title: "Active Directory Attack Path",
+    title: "Active Directory Attack-Path Investigation",
     category: "Identity Security",
     difficulty: "Advanced",
     description:
-      "Map identity relationships and identify a controlled privilege-escalation route through the lab domain.",
+      "Analyse controlled identity relationships and identify the shortest privilege-escalation path to a domain controller.",
     techniques: [
-      "BloodHound",
-      "Kerberos",
+      "BloodHound-Style Analysis",
+      "Identity Relationships",
       "Privilege Escalation",
+      "Attack-Path Mapping",
     ],
     status: "Building",
+    duration: "30–45 minutes",
+    exercises: 7,
+    environment: "Browser-based identity investigation",
+    platform: "Killercoda",
   },
   {
     id: "linux-compromise",
@@ -206,7 +232,7 @@ export const labScenarios: LabScenario[] = [
     category: "Threat Detection",
     difficulty: "Advanced",
     description:
-      "Safely simulate selected ransomware behaviours and develop behavioural detections without using real destructive malware.",
+      "Safely simulate selected ransomware behaviours and develop behavioural detections without using destructive malware.",
     techniques: [
       "File Behaviour",
       "Process Monitoring",
