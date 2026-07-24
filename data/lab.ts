@@ -77,7 +77,7 @@ export const labNodes: LabNode[] = [
     shortName: "WIN-11",
     category: "Endpoint Security",
     description:
-      "Windows workstation configured with enhanced logging, Sysmon telemetry and endpoint attack simulations.",
+      "Windows workstation represented through realistic Sysmon, PowerShell and Windows Security telemetry for controlled investigation exercises.",
     status: "Online",
     technologies: [
       "Windows 11",
@@ -134,11 +134,11 @@ export const labNodes: LabNode[] = [
     shortName: "SIEM",
     category: "Blue Team",
     description:
-      "Centralised monitoring environment for log ingestion, threat detection, investigation and attack correlation.",
-    status: "Building",
+      "Centralised monitoring environment for log analysis, threat detection, investigation and attack correlation.",
+    status: "Online",
     technologies: [
       "Wazuh",
-      "Elastic",
+      "Sysmon",
       "Sigma",
       "MITRE ATT&CK",
     ],
@@ -179,19 +179,22 @@ export const labScenarios: LabScenario[] = [
     category: "Detection Engineering",
     difficulty: "Intermediate",
     description:
-      "Investigate suspicious PowerShell execution using prepared Sysmon, Windows Security, PowerShell and Wazuh telemetry.",
+      "Investigate a suspicious Microsoft Office-to-PowerShell execution chain using prepared Sysmon, Windows Security, PowerShell Script Block and Wazuh telemetry.",
     techniques: [
       "PowerShell Logging",
       "Sysmon",
+      "Windows Event 4688",
       "Sigma Rules",
       "Wazuh",
       "MITRE ATT&CK",
     ],
-    status: "Building",
+    status: "Available",
     duration: "30–40 minutes",
     exercises: 8,
-    environment: "Browser-based log investigation",
+    environment: "Browser-based SOC investigation",
     platform: "Killercoda",
+    launchUrl:
+      "https://killercoda.com/kaushalkumar/scenario/powershell-detection",
   },
   {
     id: "active-directory-attack",
