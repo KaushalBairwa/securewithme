@@ -21,7 +21,10 @@ export interface LabScenario {
   id: string;
   title: string;
   category: string;
-  difficulty: "Beginner" | "Intermediate" | "Advanced";
+  difficulty:
+    | "Beginner"
+    | "Intermediate"
+    | "Advanced";
   description: string;
   techniques: string[];
   status: "Available" | "Building" | "Planned";
@@ -40,13 +43,13 @@ export const labNodes: LabNode[] = [
     shortName: "KALI",
     category: "Offensive Security",
     description:
-      "Primary offensive workstation used for reconnaissance, vulnerability validation, exploitation and adversary simulation.",
+      "Primary offensive workstation used for authorised reconnaissance, service enumeration and attack-surface investigation.",
     status: "Online",
     technologies: [
       "Kali Linux",
       "Nmap",
-      "Burp Suite",
-      "Metasploit",
+      "Curl",
+      "Netcat",
     ],
     position: {
       x: 10,
@@ -59,7 +62,7 @@ export const labNodes: LabNode[] = [
     shortName: "GATEWAY",
     category: "Network Security",
     description:
-      "Controlled gateway for segmentation, traffic monitoring and simulated perimeter-security policies.",
+      "Controlled gateway representing segmentation, traffic monitoring and simulated perimeter-security policies.",
     status: "Building",
     technologies: [
       "Firewall",
@@ -96,13 +99,13 @@ export const labNodes: LabNode[] = [
     shortName: "UBUNTU",
     category: "Server Security",
     description:
-      "Linux server hosting intentionally vulnerable services, application workloads and infrastructure telemetry.",
+      "Controlled Linux environment hosting intentionally exposed services for safe reconnaissance and service-enumeration exercises.",
     status: "Online",
     technologies: [
       "Ubuntu Server",
-      "Docker",
-      "Nginx",
-      "OpenSSH",
+      "Python",
+      "HTTP",
+      "TCP Services",
     ],
     position: {
       x: 58,
@@ -111,17 +114,17 @@ export const labNodes: LabNode[] = [
   },
   {
     id: "active-directory",
-    title: "Active Directory Lab",
+    title: "Active Directory Investigation",
     shortName: "AD-DC",
     category: "Identity Security",
     description:
-      "Enterprise identity environment for privilege escalation, credential attacks and access-control testing.",
+      "Controlled BloodHound-style identity dataset used to investigate group relationships, dangerous permissions and privilege-escalation paths.",
     status: "Online",
     technologies: [
       "Active Directory",
-      "Kerberos",
-      "BloodHound",
-      "Group Policy",
+      "BloodHound Analysis",
+      "Delegated Permissions",
+      "Identity Graphs",
     ],
     position: {
       x: 80,
@@ -134,7 +137,7 @@ export const labNodes: LabNode[] = [
     shortName: "SIEM",
     category: "Blue Team",
     description:
-      "Centralised monitoring environment for log analysis, threat detection, investigation and attack correlation.",
+      "Centralised monitoring environment represented through prepared endpoint, process, network and Wazuh telemetry.",
     status: "Online",
     technologies: [
       "Wazuh",
@@ -166,9 +169,10 @@ export const labScenarios: LabScenario[] = [
       "Attack-Surface Mapping",
     ],
     status: "Available",
-    duration: "25â€“35 minutes",
+    duration: "25–35 minutes",
     exercises: 6,
-    environment: "Disposable Ubuntu browser terminal",
+    environment:
+      "Disposable Ubuntu browser terminal",
     platform: "Killercoda",
     launchUrl:
       "https://killercoda.com/kaushalkumar/scenario/external-attack-surface",
@@ -189,31 +193,38 @@ export const labScenarios: LabScenario[] = [
       "MITRE ATT&CK",
     ],
     status: "Available",
-    duration: "30â€“40 minutes",
+    duration: "30–40 minutes",
     exercises: 8,
-    environment: "Browser-based SOC investigation",
+    environment:
+      "Browser-based SOC investigation",
     platform: "Killercoda",
     launchUrl:
       "https://killercoda.com/kaushalkumar/scenario/powershell-detection",
   },
   {
     id: "active-directory-attack",
-    title: "Active Directory Attack-Path Investigation",
+    title:
+      "Active Directory Attack-Path Investigation",
     category: "Identity Security",
     difficulty: "Advanced",
     description:
-      "Analyse controlled identity relationships and identify the shortest privilege-escalation path to a domain controller.",
+      "Analyse a controlled identity graph, identify dangerous delegated permissions, trace the shortest privilege-escalation path to a domain controller and recommend remediation.",
     techniques: [
       "BloodHound-Style Analysis",
       "Identity Relationships",
+      "GenericAll",
       "Privilege Escalation",
       "Attack-Path Mapping",
+      "Remediation",
     ],
-    status: "Building",
-    duration: "30â€“45 minutes",
+    status: "Available",
+    duration: "30–45 minutes",
     exercises: 7,
-    environment: "Browser-based identity investigation",
+    environment:
+      "Browser-based identity investigation",
     platform: "Killercoda",
+    launchUrl:
+      "https://killercoda.com/kaushalkumar/scenario/ad-attack-path",
   },
   {
     id: "linux-compromise",
@@ -221,7 +232,7 @@ export const labScenarios: LabScenario[] = [
     category: "Offensive Security",
     difficulty: "Intermediate",
     description:
-      "Exploit an intentionally vulnerable Linux service and investigate the resulting activity from the defensive platform.",
+      "Exploit an intentionally vulnerable Linux service and investigate the resulting activity using defensive telemetry.",
     techniques: [
       "Vulnerability Validation",
       "Linux Logs",
